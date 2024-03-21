@@ -74,6 +74,7 @@ class Meter:
             self.signal = []
             self.timestamps = []
             self.rescan = []
+            self.bpm = None
             return do_face_updated, do_rppg_updated
         
         # Update the signal
@@ -271,9 +272,5 @@ class Meter:
         _,_,_,max_loc = cv2.minMaxLoc(rppg_fft, mask=mask)
         
         bpm = max_loc[1] * fps / rows_cnt * SEC_PER_MIN
-        # bpm = max_val * fps / rows_cnt * SEC_PER_MIN
-        
-        print(bpm, max_loc[1], fps)
-        # print(bpm, max_val, max_loc[1], fps)
         
         return bpm

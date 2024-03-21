@@ -5,10 +5,10 @@ from datetime import datetime
 from cv2 import Mat
 
 HAARCASCADE_URI = 'haarcascade_frontalface_alt.xml'
-FRAME_WIDTH = 1280
-FRAME_HEIGHT = 720
+FRAME_WIDTH = 640
+FRAME_HEIGHT = 480
 TARGET_FPS = 30
-WINDOW_SIZE = 1
+WINDOW_SIZE = 10
 
 webcam = Webcam(
     width=FRAME_WIDTH,
@@ -30,22 +30,25 @@ overlay_mask : Mat = None
 
 display.start()
 cnt = 0
+
 while True:
     # capture frame from webcam
     ret, frame = webcam.capture()
     if not ret:
         webcam.wait()
         continue
-
+    
     # process frame by the meter
     _, do_rppg_updated = meter.process_frame(frame)
 
-    if meter.fps is not None and cnt % 10 == 0:
-        print(f'FPS: {meter.fps}')
-
+    # if meter.fps is not None and cnt % 10 == 0:
+        # print(f'FPS: {meter.fps}')
+    if meter.bpm is not None and cnt % 10 == 0:
+        print(f'BPM: {meter.bpm}')
+        
     if meter.face_pos is not None:
         display.mack_face(frame, meter.face_pos)
-    
+        
     # if do_rppg_updated:
     #     overlay_mask = display.make_overlay_mask(
     #         frame=frame, 
@@ -58,4 +61,5 @@ while True:
     display.show_frame(frame)
     
     webcam.wait()
+    
     cnt += 1
